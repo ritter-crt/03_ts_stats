@@ -1,14 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Matchreader_1 = require("./Matchreader");
+const CsvFileReader_1 = require("./CsvFileReader");
+const MatchReader_1 = require("./MatchReader");
 const MatchResult_1 = require("./MatchResult");
-// readFileSync we can read any time of file
-// utf-8 -> of content we expect
-// parse into useable data structure
-const reader = new Matchreader_1.MatchReader('football.csv');
-reader.read();
+// Create an object that satisfies the "DataReader" interface
+const cvsFileReader = new CsvFileReader_1.CsvFileReader('football.csv');
+// Create an instance of MatchReader and pass in something
+// satisfying the "DataReader" interface
+const matchReader = new MatchReader_1.MatchReader(cvsFileReader);
+matchReader.load();
+// matchReader.matches
 let manUnitedWins = 0;
-for (let match of reader.data) {
+for (let match of matchReader.matches) {
     if (match[1] === 'Man United' && match[5] === MatchResult_1.MatchResult.HomeWin) {
         manUnitedWins++;
     }

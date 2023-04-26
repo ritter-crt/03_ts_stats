@@ -1,14 +1,10 @@
 import fs from 'fs';
 
-// // to make CsvFileReader reusable it must have no reference to MatchData
-// -> Generic Class <T>
-// T will be replaced by MatchData
-export abstract class CsvFileReader<T> {
+export class CsvFileReader {
   // array of arrays with date, string...
-  data: T[] = [];
+  data: string[][] = [];
 
   constructor(public filename: string) {}
-  abstract mapRow(row: string[]): T;
   read(): void {
     this.data = fs
       .readFileSync(this.filename, {
@@ -17,8 +13,7 @@ export abstract class CsvFileReader<T> {
       .split('\n')
       .map((row: string): string[] => {
         return row.split(',');
-        // reference to helper method to mapRow without invoking it ()
-      })
-      .map(this.mapRow);
+      });
+    // returning something that has the exact same structure as the tuple MatchData
   }
 }

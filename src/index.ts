@@ -1,16 +1,19 @@
-import { MatchReader } from './Matchreader';
+import { CsvFileReader } from './CsvFileReader';
+import { MatchReader } from './MatchReader';
+
 import { MatchResult } from './MatchResult';
 
-// readFileSync we can read any time of file
-// utf-8 -> of content we expect
+// Create an object that satisfies the "DataReader" interface
+const cvsFileReader = new CsvFileReader('football.csv');
+// Create an instance of MatchReader and pass in something
+// satisfying the "DataReader" interface
+const matchReader = new MatchReader(cvsFileReader);
+matchReader.load();
 
-// parse into useable data structure
-const reader = new MatchReader('football.csv');
-reader.read();
-
+// matchReader.matches
 let manUnitedWins = 0;
 
-for (let match of reader.data) {
+for (let match of matchReader.matches) {
   if (match[1] === 'Man United' && match[5] === MatchResult.HomeWin) {
     manUnitedWins++;
   } else if (match[2] === 'Man United' && match[5] === MatchResult.AwayWin) {
