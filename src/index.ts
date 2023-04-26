@@ -1,12 +1,11 @@
-import fs from 'fs';
-import { CsvFileReader } from './CsvFileReader';
+import { MatchReader } from './Matchreader';
 import { MatchResult } from './MatchResult';
 
 // readFileSync we can read any time of file
 // utf-8 -> of content we expect
 
 // parse into useable data structure
-const reader = new CsvFileReader('football.csv');
+const reader = new MatchReader('football.csv');
 reader.read();
 
 let manUnitedWins = 0;

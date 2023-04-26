@@ -1,15 +1,14 @@
 import fs from 'fs';
-import { dateStringToDate } from './utils';
-import { MatchResult } from './MatchResult';
 
-// new tuple
-type MatchData = [Date, string, string, number, number, MatchResult, string];
-
-export class CsvFileReader {
+// // to make CsvFileReader reusable it must have no reference to MatchData
+// -> Generic Class <T>
+// T will be replaced by MatchData
+export abstract class CsvFileReader<T> {
   // array of arrays with date, string...
-  data: MatchData[] = [];
+  data: T[] = [];
 
   constructor(public filename: string) {}
+  abstract mapRow(row: string[]): T;
   read(): void {
     this.data = fs
       .readFileSync(this.filename, {
@@ -21,23 +20,5 @@ export class CsvFileReader {
         // reference to helper method to mapRow without invoking it ()
       })
       .map(this.mapRow);
-  }
-  // helper method
-  mapRow(row: string[]): MatchData {
-    return [
-      // converting string into useable data
-      // into date
-      dateStringToDate(row[0]),
-      // stays string
-      row[1],
-      row[2],
-      // into number
-      parseInt(row[3]),
-      parseInt(row[4]),
-      // into any possible value of MatchResult enum
-      row[5] as MatchResult,
-      // stays string
-      row[6],
-    ];
   }
 }
